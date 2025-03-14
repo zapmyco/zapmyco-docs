@@ -1,16 +1,14 @@
-import "nextra-theme-docs/style.css";
-import "../../globals.css";
 import {
   Layout,
   Navbar,
   Footer,
   LocaleSwitch,
-  Link,
   LastUpdated,
 } from "nextra-theme-docs";
-import { getDictionary, getDirection } from "../_dictionaries/get-dictionary";
 import { getPageMap } from "nextra/page-map";
-import { Banner, Head } from "nextra/components";
+import { Head } from "nextra/components";
+import { getDictionary, getDirection } from "@app/_dictionaries/get-dictionary";
+import "@app/styles.css";
 
 export const metadata = {
   title: "Zapmyco Docs",
