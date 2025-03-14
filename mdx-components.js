@@ -8,5 +8,9 @@ export function useMDXComponents(components) {
   return {
     ...themeComponents,
     ...components,
+    wrapper: ({ children, ...props }) => {
+      const Wrapper = themeComponents.wrapper || (({ children }) => <>{children}</>);
+      return <Wrapper {...props}>{children}</Wrapper>;
+    },
   };
 }

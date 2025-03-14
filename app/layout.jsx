@@ -3,6 +3,7 @@ import "../globals.css";
 import { Layout, Navbar, Footer } from "nextra-theme-docs";
 import { getPageMap } from "nextra/page-map";
 import { Banner, Head } from "nextra/components";
+
 export const metadata = {
   title: "Zapmyco Docs",
   description: "Documentation for Zapmyco",
@@ -31,7 +32,7 @@ export default async function RootLayout({ children }) {
       <body>
         <Layout
           navbar={navbar}
-          pageMap={await getPageMap()}
+          pageMap={pageMap}
           docsRepositoryBase="https://github.com/apmyco/zapmyco"
           footer={footer}
         >
