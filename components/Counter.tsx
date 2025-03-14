@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from 'react'
-import styles from './counters.module.css'
 
 interface CounterProps {
   initialCount?: number;
@@ -14,7 +13,6 @@ export const Counter: React.FC<CounterProps> = ({ initialCount = 0 }) => {
     <div>
       <button 
         onClick={() => setCount(count + 1)} 
-        className={styles.counter}
       >
         Clicked {count} times
       </button>

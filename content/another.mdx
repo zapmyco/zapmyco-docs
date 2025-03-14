@@ -8,22 +8,16 @@ console.log(a);
 
 ## Component
 
-import { Counter } from '../components/Counter.tsx'
+import { Counter } from '../components/Counter'
 
 <Counter initialCount={5} />
 
 ## Todo List 组件
 
-import { TodoList } from '../components/TodoList.tsx'
+import { TodoList } from '../components/TodoList'
 
 <TodoList initialTodos={[
   { id: 1, text: '学习 Next.js', completed: true },
   { id: 2, text: '学习 TypeScript', completed: false },
   { id: 3, text: '学习 Nextra', completed: false }
 ]} />
-
-## External Component
-
-import Counters from '../components/counters'
-
-<Counters />

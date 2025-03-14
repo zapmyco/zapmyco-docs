@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from 'react'
-import styles from './counters.module.css'
 
 // 定义Todo项的接口
 interface Todo {
@@ -48,23 +47,23 @@ export const TodoList: React.FC<TodoListProps> = ({ initialTodos = [] }) => {
   };
 
   return (
-    <div className={styles.todoContainer}>
+    <div className="todoContainer">
       <h3>待办事项列表</h3>
       
-      <div className={styles.addTodo}>
+      <div className="addTodo">
         <input
           type="text"
           value={newTodoText}
           onChange={(e) => setNewTodoText(e.target.value)}
           placeholder="添加新的待办事项..."
-          className={styles.todoInput}
+          className="todoInput"
         />
-        <button onClick={addTodo} className={styles.todoButton}>添加</button>
+        <button onClick={addTodo} className="todoButton">添加</button>
       </div>
       
-      <ul className={styles.todoList}>
+      <ul className="todoList">
         {todos.map(todo => (
-          <li key={todo.id} className={styles.todoItem}>
+          <li key={todo.id} className="todoItem">
             <input
               type="checkbox"
               checked={todo.completed}
@@ -75,7 +74,7 @@ export const TodoList: React.FC<TodoListProps> = ({ initialTodos = [] }) => {
             </span>
             <button 
               onClick={() => deleteTodo(todo.id)}
-              className={styles.deleteButton}
+              className="deleteButton"
             >
               删除
             </button>
@@ -84,7 +83,7 @@ export const TodoList: React.FC<TodoListProps> = ({ initialTodos = [] }) => {
       </ul>
       
       {todos.length === 0 && (
-        <p className={styles.emptyMessage}>暂无待办事项</p>
+        <p className="emptyMessage">暂无待办事项</p>
       )}
     </div>
   );
