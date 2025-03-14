@@ -1,0 +1,187 @@
+# How to Contribute Code
+
+Thank you for your interest in our project! This guide will help you set up your development environment and start contributing code. We use Dev Containers to ensure all developers have a consistent development environment, regardless of what operating system you use.
+
+## Prerequisites
+
+Before you begin, please make sure you have the following software installed on your system:
+
+1. [Git](https://git-scm.com/downloads)
+2. [Docker](https://www.docker.com/products/docker-desktop/)
+3. [Visual Studio Code](https://code.visualstudio.com/)
+4. [VS Code Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+## Getting the Code
+
+First, clone the project repository to your local machine:
+
+```bash
+git clone https://github.com/zapmyco/zapmyco.git
+cd zapmyco
+```
+
+## Setting Up the Development Environment with Dev Container
+
+Our project uses Dev Containers to provide a consistent development environment. This ensures that all developers use the same dependency versions and tools, regardless of their local system.
+
+### For Global Developers
+
+1. Open the project folder in VS Code
+2. When VS Code detects the Dev Container configuration, it will prompt you to "Reopen in Container", click this option
+3. Alternatively, you can press `F1`, then select `Dev Containers: Reopen in Container`
+
+VS Code will build the Docker container and open the project inside the container. This may take a few minutes, especially when running for the first time.
+
+### For Developers in China
+
+Due to network issues, developers in China may encounter difficulties when pulling Docker images and installing dependencies. We provide options using Chinese mirror sources, which can significantly improve build speed.
+
+#### Method 1: Using the .env.cn File (Recommended)
+
+The project root directory already includes a pre-configured `.env.cn` file with all necessary Chinese mirror sources set up. You only need to:
+
+1. Copy `.env.cn` to `.env`:
+
+   ```bash
+   cp .env.cn .env
+   ```
+
+2. Then open the project in VS Code and select "Reopen in Container"
+
+#### Method 2: Manually Setting Environment Variables
+
+If you want to manually control mirror source configuration, you can edit the `.env` file and set the following environment variables:
+
+```bash
+# Enable Chinese mirror sources
+USE_CN_MIRROR=true
+
+# Tsinghua University mirror
+TSINGHUA_MIRROR="https://mirrors.tuna.tsinghua.edu.cn"
+
+# Mirror source configuration
+APT_MIRROR="${TSINGHUA_MIRROR}/debian"
+PIP_MIRROR="${TSINGHUA_MIRROR}/pypi/simple"
+NPM_MIRROR="https://registry.npmmirror.com"
+NODEJS_MIRROR="${TSINGHUA_MIRROR}/nodejs-release/"
+```
+
+#### Method 3: Configure in devcontainer.json
+
+You can also directly edit the `.devcontainer/devcontainer.json` file, adding environment variable configuration:
+
+```json
+"remoteEnv": {
+  "USE_CN_MIRROR": "true"
+}
+```
+
+These configurations will automatically use the following mirror sources:
+
+- APT sources (Debian packages): Tsinghua University mirror
+- Python pip/uv mirror: Tsinghua University PyPI mirror
+- NPM mirror: Taobao NPM mirror
+- Node.js installation source: Tsinghua University Node.js mirror
+
+## Development Workflow
+
+Once the Dev Container is started, you can begin development:
+
+1. Create a new branch:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+2. Make code changes
+
+3. Run tests to ensure everything is working properly:
+
+   ```bash
+   # Frontend tests
+   cd apps/frontend
+   pnpm test
+
+   # Backend tests
+   cd apps/backend
+   pytest
+   ```
+
+4. Commit your changes:
+
+   ```bash
+   git add .
+   git commit -m "Describe your changes"
+   ```
+
+5. Push to your branch:
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+6. Create a Pull Request
+
+## Project Structure
+
+Our project uses a monorepo structure, with main components including:
+
+- `apps/frontend`: Frontend application, using Next.js and Tailwind CSS
+- `apps/backend`: Backend service, using Python and FastAPI
+- `apps/docs`: Project documentation, using Nextra
+
+## Code Standards
+
+- Frontend code uses ESLint and Prettier for formatting
+- Backend code follows PEP 8 standards, using Black for formatting
+- All code should pass the respective linting checks before being committed
+
+## Common Issue Resolution
+
+### Dev Container Build Failure
+
+If you encounter issues when building the Dev Container:
+
+1. Ensure Docker is running
+2. Try rebuilding the container: `F1` > `Dev Containers: Rebuild Container`
+3. For users in China: Confirm you have configured the `.env` file (copied from `.env.cn`)
+4. Check Docker network connectivity, ensure you can access necessary resources
+
+### Dependency Installation Issues
+
+If you encounter issues installing dependencies inside the container:
+
+1. Frontend dependencies: Try using `pnpm install --force`
+2. Backend dependencies: Try using `uv pip install -e .`
+3. For users in China: Confirm your mirror source configuration is correct:
+
+   ```bash
+   # Check npm configuration
+   npm config get registry
+   # Should display https://registry.npmmirror.com
+
+   # Check uv/pip configuration
+   uv config get index.url
+   # Should display https://pypi.tuna.tsinghua.edu.cn/simple
+   ```
+
+4. If mirror source configuration is incorrect, you can set it manually:
+
+   ```bash
+   # Set npm mirror
+   npm config set registry https://registry.npmmirror.com
+
+   # Set pip mirror
+   pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+   uv config index.url https://pypi.tuna.tsinghua.edu.cn/simple
+   ```
+
+## Getting Help
+
+If you have any questions or need help, please:
+
+1. Consult our documentation
+2. Ask in GitHub Issues
+3. Join our community discussions
+
+Thank you for your contribution!

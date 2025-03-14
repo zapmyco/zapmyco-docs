@@ -1,0 +1,88 @@
+# Card Matching Priority Guide
+
+When defining your card `matcher` function, please use the following predefined matching results to ensure correct priority ordering with other cards in the system:
+
+| Constant Name        | Priority | Usage Scenario                           |
+| -------------------- | -------- | ---------------------------------------- |
+| `NO_MATCH`           | 0        | Device not applicable for this card      |
+| `DEFAULT_CARD`       | 1        | Only used for default cards              |
+| `WEAK_MATCH`         | 10       | Weak match, like loosely related devices |
+| `CATEGORY_MATCH`     | 20       | Match based on broad device category     |
+| `FEATURE_MATCH`      | 30       | Match based on device features           |
+| `MANUFACTURER_MATCH` | 40       | Match based on manufacturer              |
+| `ENTITY_TYPE_MATCH`  | 50       | Match based on entity type               |
+| `DEVICE_CLASS_MATCH` | 60       | Match based on device_class              |
+| `MODEL_MATCH`        | 70       | Match based on specific model            |
+| `DOMAIN_EXACT_MATCH` | 80       | Exact match based on entity domain       |
+| `ID_EXACT_MATCH`     | 90       | Exact match based on entity ID           |
+| `USER_SPECIFIED`     | 100      | Card type explicitly specified by user   |
+
+You can also create custom priority values using `CardMatchResult.custom(number)`.
+
+Example:
+
+```javascript
+import { CardMatchResult } from '@/components/devices/constants';
+
+// In matcher function
+if (entity.entity_id.startsWith('my_domain.')) {
+  return CardMatchResult.DOMAIN_EXACT_MATCH;
+}
+```
+
+## Additional Optimization Suggestions
+
+1. **Add Debug Helper Function**:
+
+```typescript:apps/frontend/src/components/devices/card-registry.ts
+debugMatchingProcess(entity: HassEntity): void {
+  console.group(`Card matching process: ${entity.entity_id}`);
+
+  const matchResults = this.cards.map(card => {
+    const result = card.meta.matcher(entity);
+    return {
+      cardId: card.meta.id,
+      match: result.match,
+      priority: result.priority
+    };
+  }).sort((a, b) => b.priority - a.priority);
+
+  console.table(matchResults);
+
+  const selectedCard = matchResults.find(r => r.match);
+  console.log(`Selected card: ${selectedCard ? selectedCard.cardId : 'No matching card'}`);
+
+  console.groupEnd();
+}
+```
+
+2. **Combinator Functions**, convenient for combining multiple matching conditions:
+
+```typescript
+export const CombineMatchers = {
+  // All must match, take highest priority
+  all: (...results: MatchResult[]): MatchResult => {
+    if (results.every((r) => r.match)) {
+      return {
+        match: true,
+        priority: Math.max(...results.map((r) => r.priority)),
+      };
+    }
+    return CardMatchResult.NO_MATCH;
+  },
+
+  // Any match is sufficient, take highest priority
+  any: (...results: MatchResult[]): MatchResult => {
+    const matching = results.filter((r) => r.match);
+    if (matching.length > 0) {
+      return {
+        match: true,
+        priority: Math.max(...matching.map((r) => r.priority)),
+      };
+    }
+    return CardMatchResult.NO_MATCH;
+  },
+};
+```
+
+This system design is comprehensive and easy to use, very friendly for third-party developers, while maintaining system extensibility and maintainability.

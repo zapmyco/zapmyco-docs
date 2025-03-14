@@ -1,0 +1,23 @@
+# Another Page
+
+```js filename="demo.js" {3} copy
+let a = 1;
+
+console.log(a);
+```
+
+## Component
+
+import { Counter } from '../../components/Counter'
+
+<Counter initialCount={5} />
+
+## Todo List 组件
+
+import { TodoList } from '../../components/TodoList'
+
+<TodoList initialTodos={[
+  { id: 1, text: '学习 Next.js', completed: true },
+  { id: 2, text: '学习 TypeScript', completed: false },
+  { id: 3, text: '学习 Nextra', completed: false }
+]} />
